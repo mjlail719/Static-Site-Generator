@@ -7,7 +7,8 @@ import shutil
 
 def main():
     copy("./static", "./public")
-    generate_page("./content/index.md", "template.html", "./public/index.html")
+    #generate_page("./content/index.md", "template.html", "./public/index.html")
+    generate_pages_recursively("./content", "template.html", "./public")
 
 def copy(source, destination):
     if not os.path.exists(destination):
@@ -52,6 +53,10 @@ def clear_directory(directory):
     return 
 
 def generate_page(from_path, template_path, dest_path):
+    if dest_path.endswith(".md"):
+        dest_path = dest_path[:len(dest_path) - 2]
+        print(dest_path)
+        dest_path += "html"
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     markdown = read_file(from_path)
     template = read_file(template_path)
@@ -61,6 +66,17 @@ def generate_page(from_path, template_path, dest_path):
     template = template.replace("{{ Title }}", title)
     template = template.replace("{{ Content }}", html)
     write_file(dest_path, template)
+
+def generate_pages_recursively(from_path, template_path, dest_path):
+    cd = os.listdir(from_path)
+    for file in cd:
+        full_path = os.path.join(from_path, file)
+        destination_path = os.path.join(dest_path, file)
+        if file.endswith(".md"):
+            generate_page(full_path, template_path, destination_path)
+        if os.path.isdir(full_path):
+            os.mkdir(destination_path)
+            generate_pages_recursively(full_path, template_path, destination_path)
 
 def read_file(path):
     if not os.path.isfile(path):

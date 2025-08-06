@@ -164,19 +164,19 @@ def block_to_html(block, block_type):
             block = block.replace("- ", "")
             temp_block = ""
             for string in block.split("\n"):
-                temp_block += f"<li>{string}</li>\n"
+                temp_block += f"<li>\n{string}\n</li>"
             block = temp_block[:len(temp_block) - 1]
         case BlockType.ORDERED_LIST:
             tag = "ol"
             index = 1
             temp_block = ""
             for string in block.strip().split("\n"):
-                temp_block += string.replace(f"{index}. ", " ")
+                temp_block += string.replace(f"{index}. ", "\n")
                 index += 1
             block = temp_block
             block = block.lstrip()
             temp_block = ""
-            for string in block.split(" "):
+            for string in block.split("\n"):
                 temp_block += f"<li>{string}</li>\n"
             block = temp_block[:len(temp_block) - 1]
 

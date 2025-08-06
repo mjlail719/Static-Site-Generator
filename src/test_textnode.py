@@ -46,7 +46,7 @@ class TestTextNode(unittest.TestCase):
         node = TextNode("Image", TextType.IMAGE, "www.testurl.org")
         html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.tag, "img")
-        self.assertEqual(html_node.value, "")
+        self.assertEqual(html_node.value, "Image")
         self.assertEqual(html_node.props, {"src":"www.testurl.org", "alt":"Image"})
 
     def test_split_nodes_delimiter(self):
