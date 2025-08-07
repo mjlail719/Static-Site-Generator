@@ -59,7 +59,7 @@ def clear_directory(directory):
                 os.remove(full_path)
     return 
 
-def generate_page(from_path, template_path, dest_path , basepath = "./"):
+def generate_page(from_path, template_path, dest_path , basepath = "/"):
     if dest_path.endswith(".md"):
         dest_path = dest_path[:len(dest_path) - 2]
         dest_path += "html"
@@ -75,7 +75,7 @@ def generate_page(from_path, template_path, dest_path , basepath = "./"):
     template = template.replace('src="/', f'src="{basepath}')
     write_file(dest_path, template)
 
-def generate_pages_recursively(from_path, template_path, dest_path, basepath = "./"):
+def generate_pages_recursively(from_path, template_path, dest_path, basepath = "/"):
     if os.path.isdir(from_path):
         cd = os.listdir(from_path)
         for file in cd:
