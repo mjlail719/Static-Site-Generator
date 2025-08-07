@@ -3,16 +3,22 @@ from htmlnode import *
 from functions import *
 import os
 import shutil
+import sys
 
 
 def main():
-    copy("./static", "./public")
+    basepath = ""
+    if len(sys.argv) == 1:
+        basepath = "./"
+    else:
+        basepath = sys.argv[1]
+    copy(f"{basepath}static", f"{basepath}docs")
     #generate_page("./content/index.md", "template.html", "./public/index.html")
-    generate_pages_recursively("./content", "template.html", "./public")
+    generate_pages_recursively(f"{basepath}content", "template.html", f"{basepath}docs")
 
 def copy(source, destination):
     if not os.path.exists(destination):
-        raise Exception(f"Invalid destination path: {destination}")
+        os.mkdir(destination)
     if not os.path.exists(source):
         raise Exception(f"Invaild source path: {source}")
 
@@ -55,7 +61,6 @@ def clear_directory(directory):
 def generate_page(from_path, template_path, dest_path):
     if dest_path.endswith(".md"):
         dest_path = dest_path[:len(dest_path) - 2]
-        print(dest_path)
         dest_path += "html"
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     markdown = read_file(from_path)
@@ -65,18 +70,21 @@ def generate_page(from_path, template_path, dest_path):
     title = extract_title(markdown) 
     template = template.replace("{{ Title }}", title)
     template = template.replace("{{ Content }}", html)
+    #template = template.replace('href="/', f'href="{from_path}')
+    #template = template.replace('src="/', f'src="{from_path}')
     write_file(dest_path, template)
 
 def generate_pages_recursively(from_path, template_path, dest_path):
-    cd = os.listdir(from_path)
-    for file in cd:
-        full_path = os.path.join(from_path, file)
-        destination_path = os.path.join(dest_path, file)
-        if file.endswith(".md"):
-            generate_page(full_path, template_path, destination_path)
-        if os.path.isdir(full_path):
-            os.mkdir(destination_path)
-            generate_pages_recursively(full_path, template_path, destination_path)
+    if os.path.isdir(from_path):
+        cd = os.listdir(from_path)
+        for file in cd:
+            full_path = os.path.join(from_path, file)
+            destination_path = os.path.join(dest_path, file)
+            if file.endswith(".md"):
+                generate_page(full_path, template_path, destination_path)
+            if os.path.isdir(full_path):
+                os.mkdir(destination_path)
+                generate_pages_recursively(full_path, template_path, destination_path)
 
 def read_file(path):
     if not os.path.isfile(path):
