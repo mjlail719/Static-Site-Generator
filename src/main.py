@@ -14,7 +14,7 @@ def main():
         basepath = sys.argv[1]
     copy(f"{basepath}static", f"{basepath}docs")
     #generate_page("./content/index.md", "template.html", "./public/index.html")
-    generate_pages_recursively(f"{basepath}content", "template.html", f"{basepath}docs")
+    generate_pages_recursively(f"{basepath}content", "template.html", f"{basepath}docs", basepath = basepath)
 
 def copy(source, destination):
     if not os.path.exists(destination):
@@ -58,7 +58,7 @@ def clear_directory(directory):
                 os.remove(full_path)
     return 
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path , basepath = "./"):
     if dest_path.endswith(".md"):
         dest_path = dest_path[:len(dest_path) - 2]
         dest_path += "html"
@@ -70,8 +70,8 @@ def generate_page(from_path, template_path, dest_path):
     title = extract_title(markdown) 
     template = template.replace("{{ Title }}", title)
     template = template.replace("{{ Content }}", html)
-    #template = template.replace('href="/', f'href="{from_path}')
-    #template = template.replace('src="/', f'src="{from_path}')
+    template = template.replace('href="/', f'href="{from_path}')
+    template = template.replace('src="/', f'src="{from_path}')
     write_file(dest_path, template)
 
 def generate_pages_recursively(from_path, template_path, dest_path):
