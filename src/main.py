@@ -9,13 +9,13 @@ import sys
 def main():
     basepath = ""
     if len(sys.argv) == 1:
-        basepath = "./"
+        basepath = "/"
     else:
         basepath = sys.argv[1]
     print(basepath)
-    copy(f"{basepath}static", f"{basepath}docs")
+    copy(f"static", f"docs")
     #generate_page("./content/index.md", "template.html", "./public/index.html")
-    generate_pages_recursively(f"{basepath}content", "template.html", f"{basepath}docs", basepath = basepath)
+    generate_pages_recursively(f"content", "template.html", f"docs", basepath = basepath)
 
 def copy(source, destination):
     if not os.path.exists(destination):
