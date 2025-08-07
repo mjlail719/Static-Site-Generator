@@ -14,7 +14,7 @@ def main():
         basepath = sys.argv[1]
     copy(f"{basepath}static", f"{basepath}docs")
     #generate_page("./content/index.md", "template.html", "./public/index.html")
-    generate_pages_recursively(f"{basepath}content", "template.html", f"{basepath}docs", basepath = basepath)
+    generate_pages_recursively(f"/content", "template.html", f"/docs", basepath = basepath)
 
 def copy(source, destination):
     if not os.path.exists(destination):
